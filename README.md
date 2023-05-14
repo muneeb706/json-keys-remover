@@ -5,7 +5,8 @@ Visual Studio Code extension that will remove all occurrences of selected keys f
 ---
 ## Features
 
-\!\[feature X\]\(images/exampleWork.gif\)
+![Demo](gif/exampleWork.gif)
+
 
 ---
 ## Run Extension 
