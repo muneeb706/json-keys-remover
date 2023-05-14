@@ -89,7 +89,7 @@ export function removeKeysinJSONData(parsedJSON:Array<Object>, selectedItems: st
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 
 	// This line of code will only be executed once when your extension is activated
 	console.log('"json-keys-remover" is now active!');
@@ -97,7 +97,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable2 = vscode.commands.registerCommand('json-keys-remover.removeKeys', () => {
+	let disposable2 = vscode.commands.registerCommand('json-keys-remover.removeKeys', async () => {
 
 		// The code you place here will be executed every time your command is executed
 		try {
@@ -110,7 +110,11 @@ export function activate(context: vscode.ExtensionContext) {
 				*is active editor document is json
 			*/
 			if (!editor || editor.document.languageId !== 'json') {
-				vscode.window.showErrorMessage('Active file is not a json file');
+				const selection = await vscode.window.showErrorMessage('Active file is not a json file', 'Try Again');
+
+				if (selection !== undefined) {
+					vscode.commands.executeCommand('json-keys-remover.removeKeys');
+				}
 				return; // no editor or no json file
 			}
 
@@ -150,7 +154,11 @@ export function activate(context: vscode.ExtensionContext) {
 			quickPick.show();
 		} catch (error) {
 			console.error(error);
-			vscode.window.showErrorMessage((error as Error).message);
+			const selection = await vscode.window.showErrorMessage((error as Error).message, 'Try Again');
+
+			if (selection !== undefined) {
+				vscode.commands.executeCommand('json-keys-remover.removeKeys');
+			}
 		}
 		
 
