@@ -15,7 +15,7 @@ suite('Extension Test Suite', () => {
 
 	// Check function getKeys
 	test('getKeys "regular" check', () => {
-		let obj = {
+		const obj = {
 			'key1':'val',
 			'key2':'val2',
 			'key3':{
@@ -34,15 +34,15 @@ suite('Extension Test Suite', () => {
 		let keys: string[] = [];
 
 		// check number
-		let objNumber = 30;
-		assert.throws(() => extension.getKeys(objNumber,'',keys), Error, "Incorrect parameter");
+		const objNumber = 30;
+		assert.throws(() => extension.getKeys(objNumber,'',keys), Error("Incorrect parameter"));
 
 		// check string
-		let objString = "30";
-		assert.throws(() => extension.getKeys(objString,'',keys), Error, "Incorrect parameter");
+		const objString = "30";
+		assert.throws(() => extension.getKeys(objString,'',keys), Error("Incorrect parameter"));
 
 		// check array
-		let objArray = [{
+		const objArray = [{
 			'key1':'val',
 			'key2':'val2',
 			'key3':{
@@ -51,7 +51,7 @@ suite('Extension Test Suite', () => {
 			'key4':'val4'
 
 		}];
-		assert.throws(() => extension.getKeys(objArray,'',keys), Error, "Incorrect parameter");
+		assert.throws(() => extension.getKeys(objArray,'',keys), Error("Incorrect parameter"));
 
 	});
 
@@ -98,15 +98,15 @@ suite('Extension Test Suite', () => {
 	});
 	test('deletePropByString "paramater type" check', () => {
 		// check number
-		let objNumber = 30;
-		assert.throws(() => extension.deletePropByString(objNumber, 'key4'), Error, "Incorrect parameter");
+		const objNumber = 30;
+		assert.throws(() => extension.deletePropByString(objNumber, 'key4'), Error("Incorrect parameter"));
 
 		// check string
-		let objString = "30";
-		assert.throws(() => extension.deletePropByString(objString, 'key4'), Error, "Incorrect parameter");
+		const objString = "30";
+		assert.throws(() => extension.deletePropByString(objString, 'key4'), Error("Incorrect parameter"));
 
 		// check array
-		let objArray = [{
+		const objArray = [{
 			'key1':'val',
 			'key2':'val2',
 			'key3':{
@@ -115,7 +115,7 @@ suite('Extension Test Suite', () => {
 			'key4':'val4'
 
 		}];
-		assert.throws(() => extension.deletePropByString(objArray, 'key4'), Error, "Incorrect parameter");
+		assert.throws(() => extension.deletePropByString(objArray, 'key4'), Error("Incorrect parameter"));
 
 	});
 
@@ -164,7 +164,7 @@ suite('Extension Test Suite', () => {
 			}
 		
 		`;
-		assert.throws(() => extension.initJSONdata(obj), Error, "Incorrect JSON format");
+		assert.throws(() => extension.initJSONdata(obj), Error("Incorrect JSON format"));
 
 	});
 
@@ -207,6 +207,41 @@ suite('Extension Test Suite', () => {
 		];
 		extension.removeKeysinJSONData(obj, ['key1']);
 		assert.deepStrictEqual(obj, expectResponse);
+
+	});
+	test('removeKeysinJSONData "selected list empty" check', () => {
+		let obj = [{
+			'key1':'val',
+			'key2':'val2',
+			'key3':{
+				'key1':'val12'
+			},
+			'key4':'val4'
+
+		},{
+			'key1':'val',
+			'key2':'val2',
+			'key3':{
+				'key1':'val12'
+			},
+			'key4':'val4'
+
+		}];
+		assert.throws(() => extension.removeKeysinJSONData(obj, []), Error("The selected list is empty"));
+
+	});
+	test('removeKeysinJSONData "paramater type" check', () => {
+		// check Array number
+		const objNumber = [30];
+		assert.throws(() => extension.removeKeysinJSONData(objNumber, ['key1']), Error("Incorrect parameter"));
+
+		// check Array string
+		const objstring = ["30"];
+		assert.throws(() => extension.removeKeysinJSONData(objstring, ['key1']), Error("Incorrect parameter"));
+
+		// check Array Array
+		const objArray = [[]];
+		assert.throws(() => extension.removeKeysinJSONData(objArray, ['key1']), Error("Incorrect parameter"));
 
 	});
 

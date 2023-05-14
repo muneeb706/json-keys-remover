@@ -71,10 +71,15 @@ export function initJSONdata(stringJSONData:string) {
  * Extract selected keys from json data
  */
 export function removeKeysinJSONData(parsedJSON:Array<Object>, selectedItems: string[]){
+
+	if(selectedItems.length === 0){throw new Error("The selected list is empty");}
+
 	// For selected keys in quickPick
 	for (const key of selectedItems) {
 		// For data in json
 		for (const iterator1 of parsedJSON) {
+			if(typeof iterator1 !== "object" || Array.isArray(iterator1)){throw new Error("Incorrect parameter");}
+
 			deletePropByString(iterator1, key);
 		}
 	}
