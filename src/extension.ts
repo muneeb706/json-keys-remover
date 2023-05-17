@@ -3,29 +3,52 @@
 import * as vscode from 'vscode';
 
 // Functions which use later
-
+interface tag {
+	tag:string;
+	has:Array<string>
+}
 /**
  * Get keys in json data
  */
-export function getKeys(obj:Object, pre:string, keys:string[]){
+export function getKeys(obj:any, pre:string, keys:string[]){
 
-	if(typeof obj !== "object" || Array.isArray(obj)){throw new Error("Incorrect parameter");}
+	// console.log(obj.tag);
+	pre += obj.tag + ".";
 
-	for(let key in obj){
-		let addKEy = pre === '' ? key : pre+'.'+ key;
-		keys.indexOf(addKEy) === -1 ? keys.push(addKEy) : null;
-		if(typeof obj[key as keyof typeof obj] === "object"){
-			getKeys(obj[key as keyof typeof obj], pre === '' ? key : pre+'.'+ key, keys);
+	if (Array.isArray(obj.val)) {
+		// console.log("array");
+		for (let index = 0; index < obj.val.length; index++) {
+			const element = obj.val[index];
+			getKeys({
+				tag:index,
+				val:element
+			}, pre, keys);
+		}
+	
+	}
+	//Hep objenin içindekilere ! koyunuyor.
+	//Gidebildiği kadar gidiyor.Her bölündüğünde bölünen her parça için en uca kadar gidiyor.
+	//Her ünlem koyduğunda keys a push la
+	else if(typeof obj.val === 'object'){
+		// console.log("object");
+		for (var key of Object.keys(obj.val)) {
+
+			// let addKEy = pre === '' ? `['object'][${key}]` : pre+'.'+ `['object'][${key}]`;
+			// console.log(addKEy);
+			keys.push(pre+`[${key}]`)
+			getKeys({
+				tag:`[${key}]`,
+				val:obj.val[key]
+			}, pre, keys);
 		}
 	}
 } 
-
 /**
  * Delete selected keys in json data
  */
 export function deletePropByString(obj:Object, propString:string) {
 				
-	if(typeof obj !== "object" || Array.isArray(obj)){throw new Error("Incorrect parameter");}
+	// if(typeof obj !== "object" || Array.isArray(obj)){return;}
 
 	var prop, props = propString.split('.');
 
@@ -47,42 +70,68 @@ export function deletePropByString(obj:Object, propString:string) {
  * Parse json data and extract keys
  */
 export function initJSONdata(stringJSONData:string) {
-	// Variables
+	let dataJsonArray = ""
 	try {
-		let dataJsonArray = JSON.parse(stringJSONData);
-		let keys: string[] = [];
-
-		// get keys all object from array in json
-		for (const dataJson of dataJsonArray) {
-			getKeys(dataJson,'',keys);
-		}
-
-		return {
-			parsedJSON: dataJsonArray,
-			keys: keys
-		};
+		dataJsonArray = JSON.parse(stringJSONData);
 	} catch (error) {
+		// console.error(error)
 		throw new Error("Incorrect JSON format");
 	}
+
+	let keys: string[] = [];
+	getKeys(
+		{
+			tag:"root",
+			val:dataJsonArray
+		}
+		,'',keys);
+
+	if(keys.length === 0){throw new Error("No found keys");}
+
+	return {
+		parsedJSON: dataJsonArray,
+		keys: keys
+	};
 	
 }
 
 /**
  * Extract selected keys from json data
  */
-export function removeKeysinJSONData(parsedJSON:Array<Object>, selectedItems: string[]){
+export function removeKeysinJSONData(parsedJSON:any, selectedItems: string[], tags:Array<tag>){
 
 	if(selectedItems.length === 0){throw new Error("The selected list is empty");}
 
-	// For selected keys in quickPick
 	for (const key of selectedItems) {
-		// For data in json
-		for (const iterator1 of parsedJSON) {
-			if(typeof iterator1 !== "object" || Array.isArray(iterator1)){throw new Error("Incorrect parameter");}
-
-			deletePropByString(iterator1, key);
-		}
+		tags.filter(x => x.tag === key).forEach(x => {
+			for (const iterator2 of x.has) {
+				deletePropByString(parsedJSON, iterator2);
+			}
+		});
 	}
+}
+
+/**
+ * Separate the tags
+ */
+export function separateTheTags(keys:string[]){
+	let showingTag: Array<tag> = [];
+	keys.forEach(x => {
+		var matches = x.match(/\[([^\]]*)\]/g)?.join('.').replace(/[\[\]']+/g,'');
+		if(matches === undefined){return};
+		let seacrh = showingTag.findIndex(y => y.tag === matches);
+		if(seacrh === -1){
+			showingTag.push({
+				tag:matches,
+				has:[x.replace("root.",'').replace(/[\[\]']+/g,'')]
+			});
+		}
+		else if(seacrh !== -1)
+		{
+			showingTag[seacrh].has.push(x.replace("root.",'').replace(/[\[\]']+/g,''));
+		}
+	})
+	return showingTag;
 }
 
 
@@ -120,10 +169,16 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		
 			const data = initJSONdata(editor.document.getText());
+			console.log(data)
 			vscode.window.showInformationMessage('JSON file parsed');
 	
 			// Create option for quickPick
-			const options = data.keys.map(label => ({label}));
+			
+			let showingTag = separateTheTags(data.keys);
+			
+			const options = Array.from(showingTag, x => {
+				return({label:x.tag});
+			});
 
 			// Create quickPick
 			const quickPick = vscode.window.createQuickPick();
@@ -137,7 +192,8 @@ export async function activate(context: vscode.ExtensionContext) {
 				// Hide quickPick
 				quickPick.hide();
 
-				removeKeysinJSONData(data.parsedJSON, quickPick.selectedItems.map(t => t.label));
+
+				removeKeysinJSONData(data.parsedJSON, quickPick.selectedItems.map(t => t.label), showingTag);
 
 				// Modify active json document
 				editor.edit(editBuilder => {
