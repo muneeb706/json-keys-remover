@@ -7,6 +7,9 @@ Visual Studio Code extension that will remove all occurrences of selected keys f
 
 ![Demo](gif/exampleWork.gif)
 
+## Requirements
+ $ npm install
+
 ## How to work properly
 1. Json file opens
 2. Select the json parse command from the command palette. The command plate closes automatically.
@@ -32,7 +35,7 @@ For example, if a file different from the json file is tried to be parsed, the w
 * Open the debug viewlet (`Ctrl+Shift+D` or `Cmd+Shift+D` on Mac) and from the launch configuration dropdown pick `Run Extension`.
 * Press `F5` to run the tests in a new window with your extension loaded.
 
-## Extension Tests
+## Extension Tests (Unit Test)
 
 * Open the debug viewlet (`Ctrl+Shift+D` or `Cmd+Shift+D` on Mac) and from the launch configuration dropdown pick `Extension Tests`.
 * Press `F5` to run the tests in a new window with your extension loaded.
