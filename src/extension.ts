@@ -70,6 +70,7 @@ export function deletePropByString(obj:Object, propString:string) {
  * Parse json data and extract keys
  */
 export function initJSONdata(stringJSONData:string) {
+	if(stringJSONData.trim() === ""){throw new Error("Empty JSON File");}
 	let dataJsonArray = ""
 	try {
 		dataJsonArray = JSON.parse(stringJSONData);

@@ -205,6 +205,16 @@ suite('Extension Test Suite', () => {
 		`;
 		assert.throws(() => extension.initJSONdata(obj4), Error("No found keys"));
 
+		let obj5 =  `
+			"30"
+		`;
+		assert.throws(() => extension.initJSONdata(obj5), Error("No found keys"));
+
+	});
+	test('initJSONdata "Empty JSON File" check', () => {
+		let obj3 =  `
+		`;
+		assert.throws(() => extension.initJSONdata(obj3), Error("Empty JSON File"));
 	});
 	test('initJSONdata "incorrect json format" check', () => {
 		//
