@@ -8,7 +8,11 @@ Visual Studio Code extension that will remove all occurrences of selected keys f
 ![Demo](gif/exampleWork.gif)
 
 ## Requirements
+```sh
  $ npm install
+```
+ 
+  To install dependencies inside the project
 
 ## How to work properly
 1. Json file opens
