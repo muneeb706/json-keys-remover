@@ -119,7 +119,7 @@ export function initJSONdata(stringJSONData: string): ParsedJSON {
  * of the properties to be removed for each tag.
  * @throws Error if `selectedItems` is empty.
  */
-function removeKeysinJSONData(
+export function removeKeysinJSONData(
   parsedJSON: any,
   selectedItems: string[],
   tags: Tag[]
