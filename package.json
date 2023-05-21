@@ -1,13 +1,32 @@
 {
   "name": "json-keys-remover",
   "displayName": "JSON Keys Remover",
-  "description": "Develop a Visual Studio Code extension that will remove all occurrences of selected keys from JSON file.",
-  "version": "0.0.1",
+  "description": "Removes all occurrences of selected keys(properties) from JSON.",
+  "version": "0.1.0",
+  "author": "Muneeb Shahid",
+  "publisher": "muneeb706",
   "engines": {
     "vscode": "^1.78.0"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/muneeb706/json-keys-remover.git"
+  },
+  "bugs": {
+    "url": "https://github.com/muneeb706/json-keys-remover/issues"
+  },
+  "icon": "jkr_icon.png",
   "categories": [
+    "Formatters",
     "Other"
+  ],
+  "keywords": [
+    "remove json keys",
+    "remove keys",
+    "json keys remover",
+    "remove keys vscode",
+    "json keys remover vscode"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
