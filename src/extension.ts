@@ -25,6 +25,7 @@ interface ParsedJSON {
  * @param keys - The array to hold all keys found
  */
 export const getKeys = (obj: any, pre: string, keys: string[]): void => {
+  // keys prefix
   pre += obj.tag + '.'
 
   const { val } = obj
@@ -34,7 +35,7 @@ export const getKeys = (obj: any, pre: string, keys: string[]): void => {
       const newTag = { tag: index, val: element }
       getKeys(newTag, pre, keys)
     })
-  } else if (typeof val === 'object') {
+  } else if (typeof val === 'object' && val !== null) {
     for (const [key, value] of Object.entries(val)) {
       const newTag = { tag: `[${key}]`, val: value }
       keys.push(`${pre}${newTag.tag}`)

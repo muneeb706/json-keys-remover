@@ -270,7 +270,8 @@ suite('Extension Test Suite', () => {
 			"key3":{
 			   "key1":"val12"
 			},
-			"key4":"val4"
+			"key4":"val4",
+      "key5":null
 		 }`
     const expectResponse2 = {
       key2: 'val2',
@@ -281,7 +282,7 @@ suite('Extension Test Suite', () => {
     }
     const data2 = extension.initJSONdata(obj2)
     const separate2 = extension.separateTheTags(data2.keys)
-    extension.removeKeysinJSONData(data2.parsedJSON, ['key1'], separate2)
+    extension.removeKeysinJSONData(data2.parsedJSON, ['key1', 'key5'], separate2)
     assert.deepStrictEqual(data2.parsedJSON, expectResponse2)
 
     //
@@ -343,22 +344,6 @@ suite('Extension Test Suite', () => {
 			}
 		 ]
 		`
-    const expectResponse = [
-      {
-        key2: 'val2',
-        key3: {
-          key1: 'val12',
-        },
-        key4: 'val4',
-      },
-      {
-        key2: 'val2',
-        key3: {
-          key1: 'val12',
-        },
-        key4: 'val4',
-      },
-    ]
 
     const data = extension.initJSONdata(obj)
     const separate = extension.separateTheTags(data.keys)
