@@ -2,7 +2,7 @@
   "name": "json-keys-remover",
   "displayName": "JSON Keys Remover",
   "description": "Removes all occurrences of selected keys(properties) from JSON.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Muneeb Shahid",
   "publisher": "muneeb706",
   "engines": {
@@ -57,6 +57,6 @@
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
     "typescript": "^5.0.4",
-    "@vscode/test-electron": "^2.3.0"
+    "@vscode/test-electron": "^2.3.8"
   }
 }
