@@ -21,11 +21,3 @@ To install dependencies inside the project
 3. Extension displays unique keys/properties (with complete path) of JSON object in Quick Pick.
 4. User selects keys (by checking checkboxes) to remove and clicks "OK" button.
 5. Extension updates the opened JSON file after removing all occurrences of selected keys from JSON object.
-
-## Release Notes
-
-This section describes major releases and their improvements.
-
-### Version 0.1.0 - initial release
-
-Added a command ("JSON Keys Remover: Remove Keys") to remove selected keys/properties from the JSON object.
